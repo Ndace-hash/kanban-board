@@ -2,8 +2,9 @@
 import { Dispatch, MouseEventHandler, SetStateAction } from "react";
 interface props {
 	setViewAddModal: Dispatch<SetStateAction<boolean>>;
+	tasks?: { title: string; description: string }[] | [];
 }
-export default function Board({ setViewAddModal }: props) {
+export default function Board({ setViewAddModal, tasks }: props) {
 	const handleAddClick: MouseEventHandler<HTMLButtonElement> = (e) => {
 		e.preventDefault();
 		setViewAddModal(true);
@@ -20,7 +21,9 @@ export default function Board({ setViewAddModal }: props) {
 				</button>
 			</div>
 			<div className="py-3">
-				<article>Build the next microsoft</article>
+				{tasks?.map((task, index) => (
+					<article key={index}>{task.title}</article>
+				))}
 			</div>
 		</section>
 	);
