@@ -81,7 +81,7 @@ export default function Board({ setViewAddModal, tasks, setTasks }: props) {
 	};
 
 	return (
-		<section className="shadow-lg border w-[350px] rounded-md">
+		<section className="shadow-lg border w-[350px] rounded-md h-80 max-h-96 overflow-auto">
 			<div className="border-b flex justify-between py-2 px-2">
 				<h2 className="">In Progress</h2>
 				<button
