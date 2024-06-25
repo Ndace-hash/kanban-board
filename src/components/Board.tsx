@@ -10,6 +10,7 @@ import "./Board.modules.css";
 
 import DeleteIcon from "@/components/Icons/MaterialSymbolsDeleteOutline";
 import ArrowIcon from "@/components/Icons/BxChevronDown";
+import AddIcon from "@/components/Icons/MaterialSymbolsAddRounded";
 interface props {
 	setViewAddModal: Dispatch<SetStateAction<boolean>>;
 	tasks: { title: string; description: string; id: string }[] | [];
@@ -82,13 +83,14 @@ export default function Board({ setViewAddModal, tasks, setTasks }: props) {
 
 	return (
 		<section className="shadow-lg border w-[350px] rounded-md h-80 max-h-96 overflow-auto">
-			<div className="border-b flex justify-between py-2 px-2">
+			<div className="border-b flex justify-between items-center py-2 px-3">
 				<h2 className="">In Progress</h2>
 				<button
-					className="text-xs border p-1 rounded-md shadow-sm"
+					className="text-xs border p-1 rounded-full shadow-md flex justify-center items-center"
 					onClick={handleAddClick}
 				>
-					add
+					<AddIcon className="text-xl" />
+					<span className="sr-only">add tasks</span>
 				</button>
 			</div>
 			<div className="py-3">
