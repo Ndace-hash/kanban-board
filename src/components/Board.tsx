@@ -1,9 +1,32 @@
 "use client";
-import { Dispatch, MouseEventHandler, SetStateAction } from "react";
+import { Dispatch, Fragment, MouseEventHandler, SetStateAction } from "react";
 interface props {
 	setViewAddModal: Dispatch<SetStateAction<boolean>>;
-	tasks?: { title: string; description: string }[] | [];
+	tasks?: { title: string; description: string; id: string }[] | [];
 }
+interface cardProp {
+	task: {
+		title: string;
+		description: string;
+		id: string;
+	};
+}
+const TaskCard = ({ task }: cardProp) => {
+	return (
+		<article className="border my-3 mx-2 rounded-md bg-green-300">
+			<div className="flex justify-between items-center p-1">
+				<h3 className="font-semibold">{task.title}</h3>
+				<div>
+					<button>delete</button>
+				</div>
+			</div>
+			<p className="shadow-inner bg-green-400 py-1 px-2 text-sm">
+				{task.description}
+			</p>
+		</article>
+	);
+};
+
 export default function Board({ setViewAddModal, tasks }: props) {
 	const handleAddClick: MouseEventHandler<HTMLButtonElement> = (e) => {
 		e.preventDefault();
@@ -21,8 +44,10 @@ export default function Board({ setViewAddModal, tasks }: props) {
 				</button>
 			</div>
 			<div className="py-3">
-				{tasks?.map((task, index) => (
-					<article key={index}>{task.title}</article>
+				{tasks?.map((task) => (
+					<Fragment key={task.id}>
+						<TaskCard task={task} />
+					</Fragment>
 				))}
 			</div>
 		</section>
