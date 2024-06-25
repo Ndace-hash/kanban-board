@@ -1,0 +1,10 @@
+@media screen and (min-width: 800px) {
+	article .actions {
+		opacity: 0;
+	}
+
+	article:hover .actions {
+		opacity: 1;
+		transition: all 200ms ease-in;
+	}
+}
