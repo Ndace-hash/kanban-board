@@ -4,6 +4,7 @@ import {
 	FormEvent,
 	Dispatch,
 	SetStateAction,
+	useEffect,
 } from "react";
 
 interface AddModalProps {
@@ -16,17 +17,36 @@ interface AddModalProps {
 			}[]
 		>
 	>;
-	tasks: { title: string; description: string }[];
 }
-const AddModal = ({ onClick, setTasks, tasks }: AddModalProps) => {
+const AddModal = ({ onClick, setTasks }: AddModalProps) => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
 	});
+
+	const characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	const generateTaskId = () => {
+		const time = Date.now();
+		const idLength = 32;
+		let id = "";
+		for (let i = 0; i < idLength; i++) {
+			const randomIndex = Math.floor(
+				(Math.random() * time) % characters.length
+			);
+			id += characters[randomIndex];
+		}
+		return id;
+	};
+
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
+		const taskDetails = {
+			...formData,
+			id: generateTaskId(),
+		};
 		setTasks((tasks) => {
-			const newTasks = [...tasks, formData];
+			const newTasks = [...tasks, taskDetails];
 			localStorage.setItem("tasks", JSON.stringify(newTasks));
 			return newTasks;
 		});
@@ -35,9 +55,10 @@ const AddModal = ({ onClick, setTasks, tasks }: AddModalProps) => {
 			description: "",
 		});
 	}
+
 	return (
 		<div
-			className="absolute inset-0 bg-gradient-to-b from-slate-200 to-slate-400 z-50 opacity-75 flex items-center justify-center"
+			className="absolute inset-0 bg-gradient-to-b from-slate-200 to-slate-400 z-50 opacity-95 flex items-center justify-center"
 			onClick={onClick}
 		>
 			<form
@@ -62,10 +83,7 @@ const AddModal = ({ onClick, setTasks, tasks }: AddModalProps) => {
 							placeholder="Describe task..."
 							value={formData.title}
 							onChange={(e) => {
-								setFormData({
-									title: e.target.value,
-									description: formData.description,
-								});
+								setFormData((data) => ({ ...data, title: e.target.value }));
 							}}
 						/>
 					</div>
@@ -83,10 +101,10 @@ const AddModal = ({ onClick, setTasks, tasks }: AddModalProps) => {
 							className="rounded-md border-2 bg-transparent outline-none text-lg p-1 focus:border-white min-h-32 max-h-32 w-full"
 							value={formData.description}
 							onChange={(e) => {
-								setFormData({
-									title: formData.title,
+								setFormData((data) => ({
+									...data,
 									description: e.target.value,
-								});
+								}));
 							}}
 						/>
 					</div>
