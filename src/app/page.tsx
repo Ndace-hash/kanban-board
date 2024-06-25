@@ -7,11 +7,11 @@ import AddModal from "@/components/AddModal";
 
 export default function Home() {
 	const [viewAddModal, setViewAddModal] = useState(false);
-	const [tasks, setTasks] = useState<{ title: string; description: string }[]>(
-		[]
-	);
+	const [tasks, setTasks] = useState<
+		{ title: string; description: string; id: string }[]
+	>([]);
 	useEffect(() => {
-		setTasks(JSON.parse(localStorage.getItem("tasks") as string));
+		setTasks(JSON.parse(localStorage.getItem("tasks") as string) || []);
 	}, []);
 
 	return (
@@ -27,7 +27,6 @@ export default function Home() {
 					onClick={(e) => {
 						setViewAddModal(false);
 					}}
-					tasks={tasks}
 					setTasks={setTasks}
 				/>
 			) : (

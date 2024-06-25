@@ -14,6 +14,7 @@ interface AddModalProps {
 			{
 				title: string;
 				description: string;
+				id: string;
 			}[]
 		>
 	>;
