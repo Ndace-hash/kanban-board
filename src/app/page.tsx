@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Components
 import Board from "@/components/Board";
@@ -10,19 +10,25 @@ export default function Home() {
 	const [tasks, setTasks] = useState<{ title: string; description: string }[]>(
 		[]
 	);
+	useEffect(() => {
+		setTasks(JSON.parse(localStorage.getItem("tasks") as string));
+	}, []);
+
 	return (
 		<main className="w-full">
 			<div className="min-w-full flex justify-center">
 				<h1 className="font-bold  text-3xl">Kanban Board</h1>
 			</div>
 			<div className=" flex justify-center">
-				<Board setViewAddModal={setViewAddModal} />
+				<Board setViewAddModal={setViewAddModal} tasks={tasks} />
 			</div>
 			{viewAddModal ? (
 				<AddModal
 					onClick={(e) => {
 						setViewAddModal(false);
 					}}
+					tasks={tasks}
+					setTasks={setTasks}
 				/>
 			) : (
 				""
