@@ -15,11 +15,26 @@ export default function Home() {
 	}, []);
 
 	return (
-		<main className="w-full">
+		<main className="w-full min-h-screen flex flex-col">
 			<div className="min-w-full flex justify-center">
 				<h1 className="font-bold  text-3xl">Kanban Board</h1>
 			</div>
-			<div className=" flex justify-center">
+			<div className=" flex justify-center items-center my-auto min-h-full flex-wrap">
+				<Board
+					setViewAddModal={setViewAddModal}
+					tasks={tasks}
+					setTasks={setTasks}
+				/>
+				<Board
+					setViewAddModal={setViewAddModal}
+					tasks={tasks}
+					setTasks={setTasks}
+				/>
+				<Board
+					setViewAddModal={setViewAddModal}
+					tasks={tasks}
+					setTasks={setTasks}
+				/>
 				<Board
 					setViewAddModal={setViewAddModal}
 					tasks={tasks}
