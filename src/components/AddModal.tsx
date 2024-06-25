@@ -1,28 +1,40 @@
-import { MouseEventHandler, useState, FormEvent, useEffect } from "react";
+import {
+	MouseEventHandler,
+	useState,
+	FormEvent,
+	Dispatch,
+	SetStateAction,
+} from "react";
 
 interface AddModalProps {
 	onClick: MouseEventHandler<HTMLDivElement>;
+	setTasks: Dispatch<
+		SetStateAction<
+			{
+				title: string;
+				description: string;
+			}[]
+		>
+	>;
+	tasks: { title: string; description: string }[];
 }
-const AddModal = ({ onClick }: AddModalProps) => {
+const AddModal = ({ onClick, setTasks, tasks }: AddModalProps) => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
 	});
-	const [tasks, setTasks] = useState<{ title: string; description: string }[]>(
-		[]
-	);
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
-		setTasks([...tasks, formData]);
+		setTasks((tasks) => {
+			const newTasks = [...tasks, formData];
+			localStorage.setItem("tasks", JSON.stringify(newTasks));
+			return newTasks;
+		});
 		setFormData({
 			title: "",
 			description: "",
 		});
 	}
-	useEffect(() => {
-		localStorage.setItem("tasks", JSON.stringify(tasks));
-	}, [tasks]);
-
 	return (
 		<div
 			className="absolute inset-0 bg-gradient-to-b from-slate-200 to-slate-400 z-50 opacity-75 flex items-center justify-center"
