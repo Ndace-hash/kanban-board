@@ -20,7 +20,11 @@ export default function Home() {
 				<h1 className="font-bold  text-3xl">Kanban Board</h1>
 			</div>
 			<div className=" flex justify-center">
-				<Board setViewAddModal={setViewAddModal} tasks={tasks} />
+				<Board
+					setViewAddModal={setViewAddModal}
+					tasks={tasks}
+					setTasks={setTasks}
+				/>
 			</div>
 			{viewAddModal ? (
 				<AddModal
