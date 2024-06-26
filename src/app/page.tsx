@@ -6,21 +6,23 @@ import Board from "@/components/Board";
 import AddModal from "@/components/AddModal";
 
 // types
-import { Boards, Task } from "@/../types";
+import { BoardNames, Task, BoardType } from "@/../types";
 
 export default function Home() {
 	const [viewAddModal, setViewAddModal] = useState(false);
-	const [currentBoard, setCurrentBoard] = useState<Boards>(Boards.BACKLOG);
+	const [currentBoard, setCurrentBoard] = useState<BoardType>(
+		BoardNames.BACKLOG
+	);
 	useEffect(() => {
 		setTasks(JSON.parse(localStorage.getItem("tasks") as string) || []);
 	}, []);
 	const [tasks, setTasks] = useState<{
 		[k: string]: Task[];
 	}>({
-		[Boards.BACKLOG]: [],
-		[Boards.TODO]: [],
-		[Boards.IN_PROGRESS]: [],
-		[Boards.COMPLETED]: [],
+		[BoardNames.BACKLOG]: [],
+		[BoardNames.TODO]: [],
+		[BoardNames.IN_PROGRESS]: [],
+		[BoardNames.COMPLETED]: [],
 	});
 
 	return (
@@ -32,9 +34,9 @@ export default function Home() {
 				<Board
 					setViewAddModal={setViewAddModal}
 					setCurrentBoard={setCurrentBoard}
-					tasks={tasks[Boards.COMPLETED]}
+					tasks={tasks[BoardNames.COMPLETED]}
 					setTasks={setTasks}
-					name={Boards.COMPLETED}
+					name={BoardNames.COMPLETED}
 				/>
 			</div>
 			{viewAddModal ? (

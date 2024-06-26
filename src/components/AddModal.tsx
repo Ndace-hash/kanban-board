@@ -1,11 +1,11 @@
 import { MouseEventHandler, useState, FormEvent, FC } from "react";
 
-import { Boards, SetState, Task } from "@/../types";
+import { BoardNames, BoardType, SetState, Task } from "@/../types";
 
 interface AddModalProps {
 	onClick: MouseEventHandler<HTMLDivElement>;
 	setTasks: SetState<{ [k: string]: Task[] }>;
-	currentBoard: Boards;
+	currentBoard: BoardType;
 }
 const AddModal: FC<AddModalProps> = ({ onClick, setTasks, currentBoard }) => {
 	const [formData, setFormData] = useState({

@@ -8,9 +8,11 @@ export interface Task {
 
 export type SetState<T> = Dispatch<SetStateAction<T>>;
 
-export enum Boards {
-	BACKLOG = "Back_Log",
-	TODO = "To_Dos",
-	IN_PROGRESS = "In_Progress",
-	COMPLETED = "Completed",
-}
+export const BoardNames = {
+	BACKLOG: "Back_Log",
+	TODO: "To_Dos",
+	IN_PROGRESS: "In_Progress",
+	COMPLETED: "Completed",
+} as const;
+
+export type BoardType = (typeof BoardNames)[keyof typeof BoardNames];
