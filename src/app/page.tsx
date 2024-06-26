@@ -5,14 +5,23 @@ import { useEffect, useState } from "react";
 import Board from "@/components/Board";
 import AddModal from "@/components/AddModal";
 
+// types
+import { Boards, Task } from "@/../types";
+
 export default function Home() {
 	const [viewAddModal, setViewAddModal] = useState(false);
-	const [tasks, setTasks] = useState<
-		{ title: string; description: string; id: string }[]
-	>([]);
+	const [currentBoard, setCurrentBoard] = useState<Boards>(Boards.BACKLOG);
 	useEffect(() => {
 		setTasks(JSON.parse(localStorage.getItem("tasks") as string) || []);
 	}, []);
+	const [tasks, setTasks] = useState<{
+		[k: string]: Task[];
+	}>({
+		[Boards.BACKLOG]: [],
+		[Boards.TODO]: [],
+		[Boards.IN_PROGRESS]: [],
+		[Boards.COMPLETED]: [],
+	});
 
 	return (
 		<main className="w-full min-h-screen flex flex-col">
@@ -22,31 +31,19 @@ export default function Home() {
 			<div className=" flex justify-center items-center my-auto min-h-full flex-wrap">
 				<Board
 					setViewAddModal={setViewAddModal}
-					tasks={tasks}
+					setCurrentBoard={setCurrentBoard}
+					tasks={tasks[Boards.COMPLETED]}
 					setTasks={setTasks}
-				/>
-				<Board
-					setViewAddModal={setViewAddModal}
-					tasks={tasks}
-					setTasks={setTasks}
-				/>
-				<Board
-					setViewAddModal={setViewAddModal}
-					tasks={tasks}
-					setTasks={setTasks}
-				/>
-				<Board
-					setViewAddModal={setViewAddModal}
-					tasks={tasks}
-					setTasks={setTasks}
+					name={Boards.COMPLETED}
 				/>
 			</div>
 			{viewAddModal ? (
 				<AddModal
-					onClick={(e) => {
+					onClick={() => {
 						setViewAddModal(false);
 					}}
 					setTasks={setTasks}
+					currentBoard={currentBoard}
 				/>
 			) : (
 				""
