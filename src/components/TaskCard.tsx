@@ -12,11 +12,9 @@ interface cardProp {
 
 const TaskCard = ({ task, handleDeleteClick }: cardProp) => {
 	const [accordionIsOpen, setAccordionIsOpen] = useState(false);
+
 	return (
-		<article
-			className="border my-3 mx-2 rounded-md bg-green-300 h-max relative hover:cursor-grab"
-			draggable
-		>
+		<article className="border my-3 mx-2 rounded-md bg-green-300 h-max relative hover:cursor-grab">
 			<div className="flex justify-between items-center p-1 relative">
 				<h3 className="font-semibold">{task.title}</h3>
 				<div className="actions flex z-10 items-center absolute right-0 px-3 bg-gradient-to-r from-green-300 to-green-400 h-full rounded-e-sm">
