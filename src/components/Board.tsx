@@ -1,5 +1,11 @@
 "use client";
-import { Dispatch, MouseEventHandler, SetStateAction, useState } from "react";
+import {
+	Dispatch,
+	FC,
+	MouseEventHandler,
+	SetStateAction,
+	useState,
+} from "react";
 import "./Board.modules.css";
 
 import TaskCard from "./TaskCard";
@@ -8,7 +14,7 @@ import { ReactSortable } from "react-sortablejs";
 
 import { Task, SetState, BoardType } from "@/../types";
 
-interface props {
+interface Props {
 	setViewAddModal: Dispatch<SetStateAction<boolean>>;
 	tasks?: Task[] | [];
 	setTasks: SetState<{ [k: string]: Task[] }>;
@@ -16,13 +22,13 @@ interface props {
 	setCurrentBoard: SetState<BoardType>;
 }
 
-export default function Board({
+const Board: FC<Props> = ({
 	setViewAddModal,
 	setCurrentBoard,
 	tasks,
 	setTasks,
 	name,
-}: props) {
+}) => {
 	const [tasksList, setTasksList] = useState([]);
 	const handleAddClick: (
 		board: BoardType
@@ -83,4 +89,6 @@ export default function Board({
 			</div>
 		</section>
 	);
-}
+};
+
+export default Board;

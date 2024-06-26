@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 // Components
 import Board from "@/components/Board";
@@ -8,7 +8,7 @@ import AddModal from "@/components/AddModal";
 // types
 import { BoardNames, Task, BoardType } from "@/../types";
 
-export default function Home() {
+const Home: FC = () => {
 	const [viewAddModal, setViewAddModal] = useState(false);
 	const [currentBoard, setCurrentBoard] = useState<BoardType>(
 		BoardNames.BACKLOG
@@ -74,4 +74,6 @@ export default function Home() {
 			)}
 		</main>
 	);
-}
+};
+
+export default Home;

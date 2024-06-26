@@ -1,7 +1,7 @@
 import DeleteIcon from "@/components/Icons/MaterialSymbolsDeleteOutline";
 import ArrowIcon from "@/components/Icons/BxChevronDown";
-import { MouseEventHandler, useState } from "react";
-interface cardProp {
+import { FC, MouseEventHandler, useState } from "react";
+interface CardProps {
 	task: {
 		title: string;
 		description: string;
@@ -10,7 +10,7 @@ interface cardProp {
 	handleDeleteClick: (id: string) => MouseEventHandler<HTMLButtonElement>;
 }
 
-const TaskCard = ({ task, handleDeleteClick }: cardProp) => {
+const TaskCard: FC<CardProps> = ({ task, handleDeleteClick }) => {
 	const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
 	return (
