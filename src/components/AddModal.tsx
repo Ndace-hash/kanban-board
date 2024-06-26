@@ -1,25 +1,13 @@
-import {
-	MouseEventHandler,
-	useState,
-	FormEvent,
-	Dispatch,
-	SetStateAction,
-	useEffect,
-} from "react";
+import { MouseEventHandler, useState, FormEvent, FC } from "react";
+
+import { Boards, SetState, Task } from "@/../types";
 
 interface AddModalProps {
 	onClick: MouseEventHandler<HTMLDivElement>;
-	setTasks: Dispatch<
-		SetStateAction<
-			{
-				title: string;
-				description: string;
-				id: string;
-			}[]
-		>
-	>;
+	setTasks: SetState<{ [k: string]: Task[] }>;
+	currentBoard: Boards;
 }
-const AddModal = ({ onClick, setTasks }: AddModalProps) => {
+const AddModal: FC<AddModalProps> = ({ onClick, setTasks, currentBoard }) => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
@@ -47,7 +35,17 @@ const AddModal = ({ onClick, setTasks }: AddModalProps) => {
 			id: generateTaskId(),
 		};
 		setTasks((tasks) => {
-			const newTasks = [...tasks, taskDetails];
+			console.log(tasks[currentBoard]);
+			let newTasksArray: Task[] = [];
+			for (let task of tasks[currentBoard]) {
+				newTasksArray.push(task);
+			}
+
+			newTasksArray = [...newTasksArray, taskDetails];
+			const newTasks = {
+				...tasks,
+				[currentBoard]: [...newTasksArray],
+			};
 			localStorage.setItem("tasks", JSON.stringify(newTasks));
 			return newTasks;
 		});
