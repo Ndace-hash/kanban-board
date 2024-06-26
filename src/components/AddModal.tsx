@@ -6,8 +6,14 @@ interface AddModalProps {
 	onClick: MouseEventHandler<HTMLDivElement>;
 	setTasks: SetState<{ [k: string]: Task[] }>;
 	currentBoard: BoardType;
+	setViewAddModal: SetState<boolean>;
 }
-const AddModal: FC<AddModalProps> = ({ onClick, setTasks, currentBoard }) => {
+const AddModal: FC<AddModalProps> = ({
+	onClick,
+	setTasks,
+	currentBoard,
+	setViewAddModal,
+}) => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
@@ -30,6 +36,7 @@ const AddModal: FC<AddModalProps> = ({ onClick, setTasks, currentBoard }) => {
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
+		if (formData.description == "" || formData.title == "") return;
 		const taskDetails = {
 			...formData,
 			id: generateTaskId(),
@@ -49,6 +56,7 @@ const AddModal: FC<AddModalProps> = ({ onClick, setTasks, currentBoard }) => {
 			localStorage.setItem("tasks", JSON.stringify(newTasks));
 			return newTasks;
 		});
+		setViewAddModal(false);
 		setFormData({
 			title: "",
 			description: "",
@@ -68,7 +76,9 @@ const AddModal: FC<AddModalProps> = ({ onClick, setTasks, currentBoard }) => {
 				className="bg-slate-700 p-8 rounded-md shadow-lg"
 			>
 				<div>
-					<h1 className="text-white font-semibold text-xl">Add new task</h1>
+					<h1 className="text-white font-semibold text-xl">
+						Add new task to {currentBoard.replaceAll("_", " ")} board
+					</h1>
 				</div>
 				<div>
 					<div className="flex flex-col gap-2 py-2">

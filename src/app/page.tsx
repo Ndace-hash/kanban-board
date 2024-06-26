@@ -34,6 +34,27 @@ export default function Home() {
 				<Board
 					setViewAddModal={setViewAddModal}
 					setCurrentBoard={setCurrentBoard}
+					tasks={tasks[BoardNames.BACKLOG]}
+					setTasks={setTasks}
+					name={BoardNames.BACKLOG}
+				/>
+				<Board
+					setViewAddModal={setViewAddModal}
+					setCurrentBoard={setCurrentBoard}
+					tasks={tasks[BoardNames.TODO]}
+					setTasks={setTasks}
+					name={BoardNames.TODO}
+				/>
+				<Board
+					setViewAddModal={setViewAddModal}
+					setCurrentBoard={setCurrentBoard}
+					tasks={tasks[BoardNames.IN_PROGRESS]}
+					setTasks={setTasks}
+					name={BoardNames.IN_PROGRESS}
+				/>
+				<Board
+					setViewAddModal={setViewAddModal}
+					setCurrentBoard={setCurrentBoard}
 					tasks={tasks[BoardNames.COMPLETED]}
 					setTasks={setTasks}
 					name={BoardNames.COMPLETED}
@@ -46,6 +67,7 @@ export default function Home() {
 					}}
 					setTasks={setTasks}
 					currentBoard={currentBoard}
+					setViewAddModal={setViewAddModal}
 				/>
 			) : (
 				""
