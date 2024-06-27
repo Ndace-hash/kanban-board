@@ -18,6 +18,7 @@ const TaskCard: FC<CardProps> = ({ task, handleDeleteClick, draggable }) => {
 		<article
 			className="border my-3 mx-2 rounded-md bg-green-300 h-max relative hover:cursor-grab"
 			draggable={draggable}
+			id={task.id}
 		>
 			<div className="flex justify-between items-center p-1 relative">
 				<h3 className="font-semibold">{task.title}</h3>
