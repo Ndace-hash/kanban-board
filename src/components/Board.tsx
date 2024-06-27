@@ -10,13 +10,12 @@ import "./Board.modules.css";
 
 import TaskCard from "./TaskCard";
 import AddIcon from "@/components/Icons/MaterialSymbolsAddRounded";
-import { ReactSortable } from "react-sortablejs";
-
+import SortableWrapper from "./Sortable";
 import { Task, SetState, BoardType } from "@/../types";
 
 interface Props {
 	setViewAddModal: Dispatch<SetStateAction<boolean>>;
-	tasks?: Task[] | [];
+	tasks: Task[] | [];
 	setTasks: SetState<{ [k: string]: Task[] }>;
 	name: BoardType;
 	setCurrentBoard: SetState<BoardType>;
@@ -29,7 +28,7 @@ const Board: FC<Props> = ({
 	setTasks,
 	name,
 }) => {
-	const [tasksList, setTasksList] = useState([]);
+	const [tasksList, setTasksList] = useState(tasks);
 	const handleAddClick: (
 		board: BoardType
 	) => MouseEventHandler<HTMLButtonElement> = (board) => {
@@ -59,8 +58,8 @@ const Board: FC<Props> = ({
 	};
 
 	return (
-		<section className="shadow-lg border w-[350px] rounded-md h-80 max-h-96 overflow-auto">
-			<div className="border-b flex justify-between items-center py-2 px-3">
+		<section className="shadow-lg border w-[350px] rounded-md h-80  overflow-auto relative">
+			<div className="border-b flex justify-between items-center py-2 px-3 h-12">
 				<h2 className="">{name.replaceAll("_", " ")}</h2>
 				<button
 					className="text-xs border p-1 rounded-full shadow-md flex justify-center items-center"
@@ -72,21 +71,16 @@ const Board: FC<Props> = ({
 					<span className="sr-only">add tasks</span>
 				</button>
 			</div>
-			<div className="py-3">
-				<ReactSortable
-					list={tasksList}
-					setList={setTasksList}
-					group={"taskBoard"}
-				>
-					{tasks?.map((task) => (
-						<TaskCard
-							task={task}
-							handleDeleteClick={() => deleteTask(task.id)}
-							key={task.id}
-						/>
-					))}
-				</ReactSortable>
-			</div>
+			<SortableWrapper group={"taskBoard"}>
+				{tasks?.map((task) => (
+					<TaskCard
+						task={task}
+						handleDeleteClick={() => deleteTask(task.id)}
+						key={task.id}
+						draggable
+					/>
+				))}
+			</SortableWrapper>
 		</section>
 	);
 };
