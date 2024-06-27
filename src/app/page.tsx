@@ -14,7 +14,19 @@ const Home: FC = () => {
 		BoardNames.BACKLOG
 	);
 	useEffect(() => {
-		setTasks(JSON.parse(localStorage.getItem("tasks") as string) || []);
+		if (!localStorage.getItem("tasks"))
+			localStorage.setItem(
+				"tasks",
+				JSON.stringify({
+					Back_Log: [],
+					To_Dos: [],
+					In_Progress: [],
+					Completed: [],
+				})
+			);
+		setTimeout(() => {
+			setTasks(JSON.parse(localStorage.getItem("tasks") as string));
+		}, 300);
 	}, []);
 	const [tasks, setTasks] = useState<{
 		[k: string]: Task[];
