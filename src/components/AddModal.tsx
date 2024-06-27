@@ -42,7 +42,6 @@ const AddModal: FC<AddModalProps> = ({
 			id: generateTaskId(),
 		};
 		setTasks((tasks) => {
-			console.log(tasks[currentBoard]);
 			let newTasksArray: Task[] = [];
 			for (let task of tasks[currentBoard]) {
 				newTasksArray.push(task);
