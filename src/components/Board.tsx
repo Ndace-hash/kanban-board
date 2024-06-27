@@ -71,7 +71,7 @@ const Board: FC<Props> = ({
 					<span className="sr-only">add tasks</span>
 				</button>
 			</div>
-			<SortableWrapper group={"taskBoard"}>
+			<SortableWrapper group={"taskBoard"} board={name}>
 				{tasks?.map((task) => (
 					<TaskCard
 						task={task}
