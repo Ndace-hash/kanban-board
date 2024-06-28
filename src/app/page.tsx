@@ -13,21 +13,6 @@ const Home: FC = () => {
 	const [currentBoard, setCurrentBoard] = useState<BoardType>(
 		BoardNames.BACKLOG
 	);
-	useEffect(() => {
-		if (!localStorage.getItem("tasks"))
-			localStorage.setItem(
-				"tasks",
-				JSON.stringify({
-					Back_Log: [],
-					To_Dos: [],
-					In_Progress: [],
-					Completed: [],
-				})
-			);
-		setTimeout(() => {
-			setTasks(JSON.parse(localStorage.getItem("tasks") as string));
-		}, 300);
-	}, []);
 	const [tasks, setTasks] = useState<{
 		[k: string]: Task[];
 	}>({
@@ -36,6 +21,13 @@ const Home: FC = () => {
 		[BoardNames.IN_PROGRESS]: [],
 		[BoardNames.COMPLETED]: [],
 	});
+
+	useEffect(() => {
+		if (localStorage.getItem("tasks") == null) {
+			localStorage.setItem("tasks", JSON.stringify(tasks));
+		}
+		setTasks(JSON.parse(localStorage.getItem("tasks") as string));
+	}, []);
 
 	return (
 		<main className="w-full min-h-screen flex flex-col">
