@@ -1,21 +1,15 @@
 "use client";
-import {
-	Dispatch,
-	FC,
-	MouseEventHandler,
-	SetStateAction,
-	useState,
-} from "react";
+import { Dispatch, FC, MouseEventHandler, SetStateAction } from "react";
 import "./Board.modules.css";
 
 import TaskCard from "./TaskCard";
 import AddIcon from "@/components/Icons/MaterialSymbolsAddRounded";
-import SortableWrapper from "./Sortable";
 import { Task, SetState, BoardType } from "@/../types";
+import { ReactSortable } from "react-sortablejs";
 
 interface Props {
 	setViewAddModal: Dispatch<SetStateAction<boolean>>;
-	tasks: Task[] | [];
+	tasks: Task[];
 	setTasks: SetState<{ [k: string]: Task[] }>;
 	name: BoardType;
 	setCurrentBoard: SetState<BoardType>;
@@ -28,7 +22,6 @@ const Board: FC<Props> = ({
 	setTasks,
 	name,
 }) => {
-	const [tasksList, setTasksList] = useState(tasks);
 	const handleAddClick: (
 		board: BoardType
 	) => MouseEventHandler<HTMLButtonElement> = (board) => {
@@ -42,12 +35,15 @@ const Board: FC<Props> = ({
 		const action: MouseEventHandler<HTMLButtonElement> = (event) => {
 			event.stopPropagation();
 			setTasks((tasks) => {
+				const recentState: { [k: string]: Task[] } = JSON.parse(
+					localStorage.getItem("tasks") as string
+				);
 				let newTasksArray: Task[] = [];
-				for (let task of tasks[name]) {
+				for (let task of recentState[name]) {
 					if (task.id != id) newTasksArray.push(task);
 				}
 				const newTasks = {
-					...tasks,
+					...recentState,
 					[name]: [...newTasksArray],
 				};
 				localStorage.setItem("tasks", JSON.stringify(newTasks));
@@ -71,7 +67,35 @@ const Board: FC<Props> = ({
 					<span className="sr-only">add tasks</span>
 				</button>
 			</div>
-			<SortableWrapper group={"taskBoard"} board={name}>
+			<ReactSortable
+				className="h-[calc(100%-60px)]"
+				group={{ name: "taskBoard" }}
+				list={tasks}
+				setList={(newList, sortable) => {
+					// console.log(sortable?.el.);
+					return setTasks((oldTasks) => {
+						if (newList.length > 0) {
+							let unique = new Set([...oldTasks[name], ...newList]);
+							const newArrayList: Task[] = [];
+							unique.forEach((t) => {
+								newArrayList.push(t);
+							});
+							localStorage.setItem(
+								"tasks",
+								JSON.stringify({
+									...oldTasks,
+									[name]: newArrayList,
+								})
+							);
+							return {
+								...oldTasks,
+								[name]: newArrayList,
+							};
+						}
+						return oldTasks;
+					});
+				}}
+			>
 				{tasks?.map((task) => (
 					<TaskCard
 						task={task}
@@ -80,7 +104,7 @@ const Board: FC<Props> = ({
 						draggable
 					/>
 				))}
-			</SortableWrapper>
+			</ReactSortable>
 		</section>
 	);
 };
