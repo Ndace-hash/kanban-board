@@ -1,12 +1,9 @@
 import DeleteIcon from "@/components/Icons/MaterialSymbolsDeleteOutline";
 import ArrowIcon from "@/components/Icons/BxChevronDown";
 import { FC, MouseEventHandler, useState } from "react";
+import { Task } from "../../types";
 interface CardProps {
-	task: {
-		title: string;
-		description: string;
-		id: string;
-	};
+	task: Task;
 	handleDeleteClick: (id: string) => MouseEventHandler<HTMLButtonElement>;
 	draggable: boolean;
 }
