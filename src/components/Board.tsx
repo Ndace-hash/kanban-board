@@ -68,11 +68,31 @@ const Board: FC<Props> = ({
 				</button>
 			</div>
 			<ReactSortable
+				onEnd={(e) => {
+					console.log(e);
+					setTasks((tasks) => {
+						const boardList = tasks[name]
+							.map((task) => {
+								if (task.id == e.item.id) {
+									task.oldParent = e.from.id as BoardType;
+									task.currentParent = e.to.id as BoardType;
+								}
+								return task;
+							})
+							.filter((tasks) => tasks.currentParent == name);
+						const newTasks = {
+							...tasks,
+							[name]: boardList,
+						};
+						localStorage.setItem("tasks", JSON.stringify(newTasks));
+						return newTasks;
+					});
+				}}
+				id={name}
 				className="h-[calc(100%-60px)]"
 				group={{ name: "taskBoard" }}
 				list={tasks}
-				setList={(newList, sortable) => {
-					// console.log(sortable?.el.);
+				setList={(newList) => {
 					return setTasks((oldTasks) => {
 						if (newList.length > 0) {
 							let unique = new Set([...oldTasks[name], ...newList]);

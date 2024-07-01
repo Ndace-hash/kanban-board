@@ -37,9 +37,10 @@ const AddModal: FC<AddModalProps> = ({
 	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
 		event.preventDefault();
 		if (formData.description == "" || formData.title == "") return;
-		const taskDetails = {
+		const taskDetails: Task = {
 			...formData,
 			id: generateTaskId(),
+			currentParent: currentBoard,
 		};
 		setTasks((tasks) => {
 			let newTasksArray: Task[] = [];
