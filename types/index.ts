@@ -4,6 +4,8 @@ export interface Task {
 	title: string;
 	description: string;
 	id: string;
+	oldParent?: BoardType;
+	currentParent?: BoardType;
 }
 
 export type SetState<T> = Dispatch<SetStateAction<T>>;
