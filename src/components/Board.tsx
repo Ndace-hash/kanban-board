@@ -1,21 +1,18 @@
 "use client";
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from "react";
+import { FC, MouseEventHandler } from "react";
 import "./Board.modules.css";
 
 import TaskCard from "./TaskCard";
 import AddIcon from "@/components/Icons/MaterialSymbolsAddRounded";
-import { Task, SetState, BoardType } from "@/../types";
-import { ReactSortable } from "react-sortablejs";
+import { Task, BoardType, BoardProps } from "@/../types";
+import {
+	ReactSortable,
+	Sortable,
+	SortableEvent,
+	Store,
+} from "react-sortablejs";
 
-interface Props {
-	setViewAddModal: Dispatch<SetStateAction<boolean>>;
-	tasks: Task[];
-	setTasks: SetState<{ [k: string]: Task[] }>;
-	name: BoardType;
-	setCurrentBoard: SetState<BoardType>;
-}
-
-const Board: FC<Props> = ({
+const Board: FC<BoardProps> = ({
 	setViewAddModal,
 	setCurrentBoard,
 	tasks,
@@ -53,6 +50,58 @@ const Board: FC<Props> = ({
 		return action;
 	};
 
+	const handleDragEnd = (
+		evt: SortableEvent,
+		_sortable: Sortable | null,
+		_store: Store
+	) => {
+		setTasks((tasks) => {
+			const boardList = tasks[name]
+				.map((task) => {
+					if (task.id == evt.item.id) {
+						task.oldParent = evt.from.id as BoardType;
+						task.currentParent = evt.to.id as BoardType;
+					}
+					return task;
+				})
+				.filter((tasks) => tasks.currentParent == name);
+			const newTasks = {
+				...tasks,
+				[name]: boardList,
+			};
+			localStorage.setItem("tasks", JSON.stringify(newTasks));
+			return newTasks;
+		});
+	};
+
+	const handleSetList = (
+		newState: Task[],
+		_sortable: Sortable | null,
+		_store: Store
+	) => {
+		return setTasks((oldTasks) => {
+			if (newState.length > 0) {
+				let unique = new Set([...oldTasks[name], ...newState]);
+				const newArrayList: Task[] = [];
+				unique.forEach((t) => {
+					newArrayList.push(t);
+				});
+				localStorage.setItem(
+					"tasks",
+					JSON.stringify({
+						...oldTasks,
+						[name]: newArrayList,
+					})
+				);
+				return {
+					...oldTasks,
+					[name]: newArrayList,
+				};
+			}
+			return oldTasks;
+		});
+	};
+
 	return (
 		<section className="shadow-lg border w-[350px] rounded-md h-80  overflow-auto relative">
 			<div className="border-b flex justify-between items-center py-2 px-3 h-12">
@@ -68,53 +117,12 @@ const Board: FC<Props> = ({
 				</button>
 			</div>
 			<ReactSortable
-				onEnd={(e) => {
-					console.log(e);
-					setTasks((tasks) => {
-						const boardList = tasks[name]
-							.map((task) => {
-								if (task.id == e.item.id) {
-									task.oldParent = e.from.id as BoardType;
-									task.currentParent = e.to.id as BoardType;
-								}
-								return task;
-							})
-							.filter((tasks) => tasks.currentParent == name);
-						const newTasks = {
-							...tasks,
-							[name]: boardList,
-						};
-						localStorage.setItem("tasks", JSON.stringify(newTasks));
-						return newTasks;
-					});
-				}}
+				onEnd={handleDragEnd}
 				id={name}
 				className="h-[calc(100%-60px)]"
 				group={{ name: "taskBoard" }}
 				list={tasks}
-				setList={(newList) => {
-					return setTasks((oldTasks) => {
-						if (newList.length > 0) {
-							let unique = new Set([...oldTasks[name], ...newList]);
-							const newArrayList: Task[] = [];
-							unique.forEach((t) => {
-								newArrayList.push(t);
-							});
-							localStorage.setItem(
-								"tasks",
-								JSON.stringify({
-									...oldTasks,
-									[name]: newArrayList,
-								})
-							);
-							return {
-								...oldTasks,
-								[name]: newArrayList,
-							};
-						}
-						return oldTasks;
-					});
-				}}
+				setList={handleSetList}
 			>
 				{tasks?.map((task) => (
 					<TaskCard
