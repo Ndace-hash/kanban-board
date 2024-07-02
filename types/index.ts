@@ -18,3 +18,11 @@ export const BoardNames = {
 } as const;
 
 export type BoardType = (typeof BoardNames)[keyof typeof BoardNames];
+
+export type BoardProps = {
+	setViewAddModal: Dispatch<SetStateAction<boolean>>;
+	tasks: Task[];
+	setTasks: SetState<{ [k: string]: Task[] }>;
+	name: BoardType;
+	setCurrentBoard: SetState<BoardType>;
+};
