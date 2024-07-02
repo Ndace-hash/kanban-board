@@ -1,6 +1,12 @@
 import { MouseEventHandler, useState, FormEvent, FC } from "react";
 
-import { BoardNames, BoardType, SetState, Task } from "@/../types";
+import {
+	BoardType,
+	PriortyLevel,
+	SetState,
+	Task,
+	TaskPriorityLevel,
+} from "@/../types";
 
 interface AddModalProps {
 	onClick: MouseEventHandler<HTMLDivElement>;
@@ -17,7 +23,9 @@ const AddModal: FC<AddModalProps> = ({
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
+		priority: PriortyLevel.NORMAL as TaskPriorityLevel,
 	});
+	const priorty = Object.keys(PriortyLevel);
 
 	const characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -60,6 +68,7 @@ const AddModal: FC<AddModalProps> = ({
 		setFormData({
 			title: "",
 			description: "",
+			priority: PriortyLevel.NORMAL,
 		});
 	}
 
@@ -80,43 +89,71 @@ const AddModal: FC<AddModalProps> = ({
 						Add new task to {currentBoard.replaceAll("_", " ")} board
 					</h1>
 				</div>
-				<div>
-					<div className="flex flex-col gap-2 py-2">
-						<label htmlFor="title" className="text-xs font-bold text-gray-300">
-							Title
-						</label>
-						<input
-							type="text"
-							id="title"
-							className="rounded-md border-2 bg-transparent outline-none text-lg p-1 focus:border-white"
-							placeholder="Describe task..."
-							value={formData.title}
-							onChange={(e) => {
-								setFormData((data) => ({ ...data, title: e.target.value }));
-							}}
-						/>
-					</div>
+
+				<div className="flex flex-col gap-2 py-2">
+					<label htmlFor="title" className="text-xs font-bold text-gray-300">
+						Title
+					</label>
+					<input
+						type="text"
+						id="title"
+						className="rounded-md border-2 bg-transparent outline-none text-lg p-1 focus:border-white"
+						placeholder="Describe task..."
+						value={formData.title}
+						onChange={(e) => {
+							setFormData((data) => ({ ...data, title: e.target.value }));
+						}}
+					/>
 				</div>
-				<div>
-					<div className="flex flex-col gap-2 py-2">
-						<label
-							htmlFor="description"
-							className="text-xs font-bold text-gray-300"
-						>
-							Description
-						</label>
-						<textarea
-							id="description"
-							className="rounded-md border-2 bg-transparent outline-none text-lg p-1 focus:border-white min-h-32 max-h-32 w-full"
-							value={formData.description}
-							onChange={(e) => {
-								setFormData((data) => ({
-									...data,
-									description: e.target.value,
-								}));
-							}}
-						/>
-					</div>
+
+				<div className="flex flex-col gap-2 py-2">
+					<label
+						htmlFor="description"
+						className="text-xs font-bold text-gray-300"
+					>
+						Description
+					</label>
+					<textarea
+						id="description"
+						className="rounded-md border-2 bg-transparent outline-none text-lg p-1 focus:border-white min-h-32 max-h-32 w-full"
+						value={formData.description}
+						onChange={(e) => {
+							setFormData((data) => ({
+								...data,
+								description: e.target.value,
+							}));
+						}}
+					/>
+				</div>
+				<div className="flex flex-col gap-2 py-2">
+					<label
+						htmlFor="description"
+						className="text-xs font-bold text-gray-300"
+					>
+						Priority
+					</label>
+					<select
+						value={formData.priority}
+						onChange={(e) => {
+							setFormData({
+								...formData,
+								priority: Number(e.target.value) as TaskPriorityLevel,
+							});
+						}}
+					>
+						<option value={PriortyLevel.URGENT}>
+							{priorty[PriortyLevel.URGENT]}
+						</option>
+						<option value={PriortyLevel.HIGH}>
+							{priorty[PriortyLevel.HIGH]}
+						</option>
+						<option value={PriortyLevel.NORMAL}>
+							{priorty[PriortyLevel.NORMAL]}
+						</option>
+						<option value={PriortyLevel.LOW}>
+							{priorty[PriortyLevel.LOW]}
+						</option>
+					</select>
 				</div>
 				<button
 					type="submit"

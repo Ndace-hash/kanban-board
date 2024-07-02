@@ -6,6 +6,7 @@ export interface Task {
 	id: string;
 	oldParent?: BoardType;
 	currentParent?: BoardType;
+	priority?: TaskPriorityLevel;
 }
 
 export type SetState<T> = Dispatch<SetStateAction<T>>;
@@ -26,3 +27,13 @@ export type BoardProps = {
 	name: BoardType;
 	setCurrentBoard: SetState<BoardType>;
 };
+
+export const PriortyLevel = {
+	URGENT: 0,
+	HIGH: 1,
+	NORMAL: 2,
+	LOW: 3,
+} as const;
+
+export type TaskPriorityLevel =
+	(typeof PriortyLevel)[keyof typeof PriortyLevel];
