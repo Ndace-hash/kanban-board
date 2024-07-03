@@ -1,7 +1,7 @@
 import DeleteIcon from "@/components/Icons/MaterialSymbolsDeleteOutline";
 import ArrowIcon from "@/components/Icons/BxChevronDown";
 import { FC, MouseEventHandler, useState } from "react";
-import { Task } from "../../types";
+import { BoardNames, Task } from "../../types";
 interface CardProps {
 	task: Task;
 	handleDeleteClick: (id: string) => MouseEventHandler<HTMLButtonElement>;
@@ -26,7 +26,13 @@ const TaskCard: FC<CardProps> = ({ task, handleDeleteClick, draggable }) => {
 			id={task.id}
 		>
 			<div className="flex justify-between items-center p-1 relative">
-				<h3 className="font-semibold">{task.title}</h3>
+				<h3
+					className={`font-semibold  ${
+						task.currentParent == BoardNames.COMPLETED ? "line-through" : ""
+					}`}
+				>
+					{task.title}
+				</h3>
 				<div
 					className={`actions flex z-10 items-center absolute right-0 px-3 bg-gradient-to-r from-transparent to-${
 						priorityGroup[task.priority!].mainColor
